@@ -16,7 +16,6 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="myproject-5" />
   </component>
   <component name="TestRunnerService">
     <option name="projectConfiguration" value="pytest" />

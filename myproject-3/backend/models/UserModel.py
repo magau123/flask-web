@@ -14,7 +14,6 @@ class User(UserMixin, db.Model):  #第二课增加内容
     username = db.Column(db.String(64), index=True)
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
-
     #脱敏
     @property
     def password(self):  #第二课增加内容
@@ -26,7 +25,7 @@ class User(UserMixin, db.Model):  #第二课增加内容
     #校验密码
     def verify_password(self, password):  #第二课增加内容
         return check_password_hash(self.password_hash, password)
-    #查询返回的格式
+
     def __repr__(self):  #第二课增加内容
         return '<User \'%s\'>' % self.username
 

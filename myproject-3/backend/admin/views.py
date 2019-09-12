@@ -12,3 +12,7 @@ admin = Blueprint('admin', __name__)
 @admin.route('/')
 def index():
     return render_template('/base/index.html')
+# def complete():
+#     return  render_template('/account/complete.html')
+# def checkout():
+#     return  render_template('/account/checkout.html')
