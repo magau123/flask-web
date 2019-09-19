@@ -67,65 +67,54 @@ def rand():
     return re
 
 
-def save_info(email):
+def save_info(username):
     db.execute('''CREATE TABLE IF NOT EXISTS USERS(
                      ID        integer PRIMARY KEY autoincrement,
-                     EMAIL     TEXT     NOT NULL,
+                     USERNAME     TEXT     NOT NULL,
                      KEY       CHAR(50) NOT NULL,
-                     UNIQUE(EMAIL));''')
+                     UNIQUE(USERNAME));''')
     key = pyotp.random_base32()
-    db.execute('''INSERT OR IGNORE INTO USERS(EMAIL, KEY) VALUES(?, ?)''', [email, key])
-    if db.execute('''SELECT KEY FROM USERS WHERE EMAIL=?;''', [email]):
+    db.execute('''INSERT OR IGNORE INTO USERS(USERNAME, KEY) VALUES(?, ?)''', [username, key])
+    if db.execute('''SELECT KEY FROM USERS WHERE USERNAME=?;''', [username]):
         return True
     else:
         return False
 
 
-def get_qrcode(email):
-    save_info(email)
-    select_key = db.execute('''SELECT KEY FROM USERS WHERE EMAIL=?;''', [email])[0]
+def get_qrcode(username):
+    save_info(username)
+    select_key = db.execute('''SELECT KEY FROM USERS WHERE USERNAME=?;''', [username])[0]
     key = select_key['KEY']
-    url = pyotp.totp.TOTP(key).provisioning_uri(email, issuer_name="瀛联MFA安全码")
-    print(url)
+    url = pyotp.totp.TOTP(key).provisioning_uri(username, issuer_name="瀛联MFA安全码")
+    # print(url)
     img = qrcode.make(url)
-    path = '../../images/'
-    for i in os.listdir(path):
-        path_file = os.path.join(path,i)
-        print(path_file)
-        if os.path.isdir(path):
-            os.remove(path_file)
-        else:
-            pass
-    img.save(path+"/验证码.jpg".format(rand()))
+    path = '/static/img/{}.jpg'.format(username)
+    img.save('./frontend'+path)
+
     return path
 
 
-def check_otp(email, code):
-    select_key = db.execute('''SELECT KEY FROM USERS WHERE EMAIL=?;''', [email])[0]
+def check_otp(username, code):
+    select_key = db.execute('''SELECT KEY FROM USERS WHERE USERNAME=?;''', [username])[0]
+    # print(select_key)
+    #print(select_key)
     key = select_key['KEY']
     totp = pyotp.TOTP(key)
+    # print(totp)
     # user_input = input("请输入验证码：")
     if code:
         res = totp.verify(code)
-        print(res)
         if res:
            return True
         else:
             return False
-def login():
-    email = 'admin'
-    get_qrcode(email)
-
-def check():
-    email = 'admin'
-    code = input("请输入验证码：")
-    checkout = check_otp(email, code)
-    return  checkout
 
 
 if __name__ == '__main__':
-    # email = input("请输入邮箱：")
-    login()
-    check()
-
-    # print(get_qrcode(email))
+    # username = input("请输入邮箱：")
+    # get_qrcode(username)
+    username = name()
+    print(username)
+    code = input("请输入验证码：")
+    print(check_otp(username,code))
+    # print(get_qrcode(username))

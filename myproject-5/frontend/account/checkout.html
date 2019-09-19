@@ -14,23 +14,42 @@
 </head>
 
 <body class="gray-bg">
+
+
     <div class="middle-box text-center loginscreen animated fadeInDown">
+<!--        <img  src={{path}}  height="350" width="350" />-->
+        <script>
+                function over(){
+                    img = document.getElementById("img");
+                    img.style.display = "block";
+                }
+
+                function out(){
+                    img = document.getElementById("img");
+                    img.style.display = "none";
+                }
+            </script>
         <div>
-            <h1 class="logo-name">Flask</h1>
-            </div>
-            <h3>Welcome to Flask</h3>
-            <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
-                <!--Continually expanded and constantly improved Inspinia Admin Them (IN+)-->
-            </p>
-            <p>Login in. To see it in action.</p>
-            <form class="m-t" role="form" action="/account/checkout" method="post">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="username" placeholder="Username" required="">
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" name="password" placeholder="Password" required="">
+            <u onmouseover="over()" onmouseout = "out()">动态验证码</u>
+            <img src="{{path}} " style="display:none" height="350" width="350" id="img"/>
+
                 </div>
 
+
+
+            <p>Please scan the code to get the security code.</p>
+            <form class="m-t" role="form" action="/account/checkout" method="post">
+<!--                <div class="form-group">-->
+<!--                    <input type="code" class="form-control" name="code" placeholder="Code" required="">-->
+<!--                </div>-->
+
+                <div class="form-group">
+
+                    <input type="text" class="form-control" disabled  placeholder= {{user}} required="">
+                </div>
+                <div class="form-group">
+                    <input type="code" class="form-control" name="code" placeholder="the security code" required="">
+                </div>
                 {% with messages = get_flashed_messages() %}
                   {% if messages %}
                     <div class="alert alert-success">
@@ -43,11 +62,14 @@
 
                 <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
 
-                <a href="#"><small>Forgot password?</small></a>
-                <p class="text-muted text-center"><small>Do not have an account?</small></p>
-                <a class="btn btn-sm btn-white btn-block" href="/account/register">Create an account</a>
+
+                <a class="btn btn-sm btn-white btn-block" href="login">back</a>
+<!--                <a href="eg_mouse.jpg">-->
+
+<!--                    <img border="0" src="../../images/12321.jpg"  height="350" width="350" />-->
+<!--                </a>-->
             </form>
-            <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2054</small> </p>
+
         </div>
     </div>
 

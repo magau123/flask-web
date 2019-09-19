@@ -21,11 +21,11 @@
                                         <th>用户名</th>
                                         <th>Email</th>
                                         <th>角色</th>
-                                        <th>操作</th>
+                                        <th>{{id}}</th>
                                      </tr>
                                   </thead>
                                   <tbody>
-                                      {% if current_user.role_id == 2 %}
+                                      {% if current_user.role_id  %}
                                           {% for user in users %}
                                                 <tr>
                                                     <td>{{user.id}}</td>
@@ -43,7 +43,7 @@
                                                         <td>{{user.username}}</td>
                                                         <td>{{user.email}}</td>
                                                         <td>{{user.role.name}}</td>
-                                                        <td><a href="">修改密码</a></td>
+                                                        <td><a href="/account/edituser">修改密码</a></td>
                                                     </tr>
                                                 {% endif %}
                                           {% endfor %}

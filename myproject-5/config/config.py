@@ -16,7 +16,7 @@ class Config(object):
     # 端口
     PORT = 10101
     ADMIN_USER = 'admin'
-    ADMIN_EMAIL = '51263921@qq.com'
+    ADMIN_EMAIL = '512639   21@qq.com'
     SECRET_KEY = '1234567890!@#$%^&*()'
 
 class ProdConfig(Config):
@@ -41,7 +41,7 @@ class SitConfig(Config):
     MYSQL_PORT = 3306         #此处修改为您的mysql的主机端口
     MYSQL_USER = 'root'       #此处修改为您的mysql的用户名称
     MYSQL_PASS = '123456'     #此处修改为您的mysql的用户密码
-    MYSQL_DB = 'web'    #此处修改为您的mysql的数据库名称
+    MYSQL_DB = 'myproject'          #此处修改为您的mysql的数据库名称
 
     SQLALCHEMY_DATABASE_URI = "mysql+pymysql://{0}:{1}@{2}:{3}/{4}?charset=utf8".format(MYSQL_USER, MYSQL_PASS, MYSQL_HOST
                                                                            , MYSQL_PORT, MYSQL_DB)

@@ -4,13 +4,15 @@
 Created by liaoyangyang1 on 2018/8/22 上午9:40.
 """
 from flask import Blueprint,request,render_template,jsonify,flash  #第二课增加内容
-from flask import redirect,url_for,abort #第五课新增
+from flask import redirect,url_for,abort,session #第五课新增
 from backend.models.UserModel import User,Role #第五课新增
 from backend.models import db
 from flask_login import login_user,login_required,logout_user,current_user #第三课增加内容 #第五课新增
 from functools import wraps #第五课新增
 from backend.models.UserModel import Permission #第五课新增
+from backend.account.TOTP import check_otp,get_qrcode,save_info,EasySqlite
 from utils.layout import layout
+import  os
 
 #账户的蓝图  访问http://host:port/account 这个链接的子链接，都会跳到这里
 account = Blueprint('account', __name__)  #第二课增加内容
@@ -26,7 +28,6 @@ def permission_required(permission): #第五课新增
             return f(*args, **kwargs)
         return decorated_function
     return decorator
-
 
 # 要求管理员权限
 def admin_required(f): #第五课新增
@@ -52,13 +53,41 @@ def login(): #第三课内容
     if request.method == "POST":
         form = request.form #获取登录表单
         user = User.query.filter_by(username=form['username']).first()  #查出用户信息
+        session['username'] = user.username
+        session['role_id'] = user.role_id
         if user is not None and user.password_hash is not None and user.verify_password(form['password']):  #检查密码是否正确
             login_user(user,True)  #登录操作
             flash('You are now logged in. Welcome back!', 'success')
-            return redirect( url_for(request.args.get('next') or 'admin.index'))
+            return redirect( url_for(request.args.get('next') or 'account.checkout'))
         else:
             flash('Invalid email or password.', 'error')
     return render_template('/account/login.html')
+
+@account.route('/checkout',methods=(["GET","POST"]))
+def checkout(): #第三课内容
+    username = session.get('username')
+    dir = './frontend/static/img/{}.jpg'.format(username)
+    if os.path.exists(dir):
+        pass
+    else:
+        path = get_qrcode(username)
+    if request.method == "POST":
+        form = request.form #获取登录表单
+        form = dict(form)
+        values = form.values()
+
+        for value in values:
+            code_value=value[0]
+        #     print(value[0])
+        # print(code_value)
+        check_value = check_otp(username,code_value)
+        print(check_value)
+        if check_value:
+            return redirect( url_for(request.args.get('next') or 'admin.index'))
+        else:
+            flash('Invalid the security code.', 'error')
+
+    return render_template('/account/checkout.html',user=username,path=path)
 
 @account.route('/logout')
 @login_required
@@ -72,8 +101,10 @@ def logout():
 @login_required
 def user_list(): #第五课新增
     Role.insert_roles()
+    username = session.get('username')
+    role = session.get('role_id')
     user_list = User.query.outerjoin(Role, User.role_id == Role.id).all()
-    return layout('/account/users.html',users=user_list)
+    return layout('/account/users.html',users=user_list,id=role,user=username)
 
 
 @account.route('/edituser',methods=(["GET","POST"]))
