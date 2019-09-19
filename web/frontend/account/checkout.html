@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>INSPINIA | Login</title>
+
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+
+
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+<!--        <img  src={{path}}  height="350" width="350" />-->
+        <script>
+                function over(){
+                    img = document.getElementById("img");
+                    img.style.display = "block";
+                }
+
+                function out(){
+                    img = document.getElementById("img");
+                    img.style.display = "none";
+                }
+            </script>
+        <div>
+            <u onmouseover="over()" onmouseout = "out()">动态验证码</u>
+            <img src="{{path}} " style="display:none" height="350" width="350" id="img"/>
+
+                </div>
+
+
+
+            <p>Please scan the code to get the security code.</p>
+            <form class="m-t" role="form" action="/account/checkout" method="post">
+<!--                <div class="form-group">-->
+<!--                    <input type="code" class="form-control" name="code" placeholder="Code" required="">-->
+<!--                </div>-->
+
+                <div class="form-group">
+
+                    <input type="text" class="form-control" disabled  placeholder= {{user}} required="">
+                </div>
+                <div class="form-group">
+                    <input type="code" class="form-control" name="code" placeholder="the security code" required="">
+                </div>
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    <div class="alert alert-success">
+                        {% for message in messages %}
+                          {{ message }}
+                        {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endwith %}
+
+                <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+
+
+                <a class="btn btn-sm btn-white btn-block" href="login">back</a>
+<!--                <a href="eg_mouse.jpg">-->
+
+<!--                    <img border="0" src="../../images/12321.jpg"  height="350" width="350" />-->
+<!--                </a>-->
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.js"></script>
+
+</body>
+</html>
